@@ -63,7 +63,7 @@ intro: Esku artean dituzun bi mundu.
 tag: Familiarra · Izarra
 Familia osoarentzako jolas parte-hartzailea. Mariren mendian girotua, jokalariek elkarlanean erabakitzen dute istorioaren norabidea. **6 urtetik aurrera.**
 
-[Larun ezagutu](#kontaktua)
+[Larun ezagutu](larun/)
 
 ### Mugarri
 tag: Helduagoa · Kulturala

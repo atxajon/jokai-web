@@ -261,6 +261,27 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.02; font-weight: 800; }
   display: block; font-size: 15px; font-weight: 600; opacity: .7; margin-bottom: 2px;
 }
 
+/* --- página Larun ---------------------------------------------------- */
+.prose { max-width: 40em; }
+.prose p { margin: 0 0 1em; }
+.prose p:last-child { margin-bottom: 0; }
+.band--pro .prose strong { color: var(--oak); }
+
+.figurak {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+}
+.figura {
+  background: var(--txuri); border: 1px solid var(--stone-2);
+  border-left: 3px solid var(--oak); border-radius: var(--r);
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 2px;
+}
+.figura strong { font-family: var(--display); font-weight: 800; font-size: 20px; line-height: 1.1; }
+.figura span { font-family: var(--mono); font-size: 12px; opacity: .7; line-height: 1.4; }
+
+.card--credit h3 { font-size: 22px; }
+.card--credit h3 a { text-underline-offset: 3px; text-decoration-color: var(--oak); }
+
 /* --- contacto ------------------------------------------------------ */
 .contact p { font-size: 21px; max-width: 34em; }
 .contact a { color: var(--oak); }

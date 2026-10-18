@@ -50,7 +50,26 @@ function calendarCard(iso) {
 }
 
 let currentLang = DEFAULT_LANG;
-const contentUrl = (lang) => `content.${lang}.md`;
+/* Páginas: cada <body data-page="..."> elige su contenido y sus secciones. */
+const PAGES = {
+  home: {
+    content: "content", homeHref: "#hero",
+    order: ["hero", "norentzat", "jokoak", "profesionalak",
+            "iritziak", "faq", "agenda", "kontaktua"],
+    nav: [["#jokoak", "nav_jokoak"], ["#norentzat", "nav_norentzat"],
+          ["#agenda", "nav_agenda"], ["#profesionalak", "nav_pro"],
+          ["#kontaktua", "nav_kontaktua"]],
+  },
+  larun: {
+    content: "../larun", homeHref: "../",   /* la página vive en /larun/ */
+    order: ["hero", "sarrera", "mari", "montessori", "sortzaileak", "kontaktua"],
+    nav: [["../#jokoak", "nav_back"], ["#mari", "nav_mari"],
+          ["#montessori", "nav_montessori"], ["#sortzaileak", "nav_sortzaileak"],
+          ["#kontaktua", "nav_kontaktua"]],
+  },
+};
+const PAGE = PAGES[document.body.dataset.page] || PAGES.home;
+const contentUrl = (lang) => `${PAGE.content}.${lang}.md`;
 
 function getLang() {
   const valid = LANGS.map((l) => l.code);
@@ -71,12 +90,6 @@ function setLang(code) {
   history.replaceState(null, "", url);
   render(code);
 }
-
-/* Orden en el que se pintan las secciones (si existen en el .md). */
-const SECTION_ORDER = [
-  "hero", "norentzat", "jokoak", "profesionalak",
-  "iritziak", "faq", "agenda", "kontaktua",
-];
 
 /* --- utilidades de markdown --------------------------------------- */
 marked.use({ breaks: true });
@@ -157,10 +170,10 @@ const R = {
         ${f.eyebrow ? `<p class="eyebrow">${mdInline(f.eyebrow)}</p>` : ""}
         <h1 class="hero__slogan">${slogan}</h1>
         ${f.subtitle ? `<p class="hero__sub">${mdInline(f.subtitle)}</p>` : ""}
-        <div class="hero__cta">
+        ${(f.cta_primary_label || f.cta_secondary_label) ? `<div class="hero__cta">
           ${f.cta_primary_label ? `<a class="btn btn--primary" href="${esc(f.cta_primary_href)}">${esc(f.cta_primary_label)}</a>` : ""}
           ${f.cta_secondary_label ? `<a class="btn btn--ghost" href="${esc(f.cta_secondary_href)}">${esc(f.cta_secondary_label)} <span aria-hidden="true">→</span></a>` : ""}
-        </div>
+        </div>` : ""}
         ${event}
       </div>
     </section>`;
@@ -255,17 +268,50 @@ const R = {
     return section("agenda", s.fields, `<div class="agenda">${rows}</div>`);
   },
 
+  mari(s) {
+    // Cada línea:  Nombre | descripción corta (opcional)
+    const chips = s.body.split("\n").map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("<!--"))
+      .map((l) => {
+        const [name, ...gloss] = l.split("|");
+        const g = gloss.join("|").trim();
+        return `<li class="figura"><strong>${esc(name.trim())}</strong>${g ? `<span>${esc(g)}</span>` : ""}</li>`;
+      }).join("");
+    return section("mari", s.fields, `<ul class="figurak">${chips}</ul>`);
+  },
+
+  sortzaileak(s) {
+    const items = splitItems(s.body).map((it) => {
+      const name = it.fields.href
+        ? `<a href="${esc(it.fields.href)}" target="_blank" rel="noopener">${esc(it.title)}</a>`
+        : esc(it.title);
+      return `
+      <article class="card card--credit">
+        <h3>${name}</h3>
+        ${md(it.body)}
+      </article>`;
+    }).join("");
+    return section("sortzaileak", s.fields, `<div class="grid grid-3">${items}</div>`);
+  },
+
   kontaktua(s) {
     const f = s.fields;
     const links = `
       <div class="contact__links">
         ${f.email ? `<a class="contact__big" href="mailto:${esc(f.email)}">${esc(f.email)}</a>` : ""}
         ${f.phone ? `<a class="contact__phone" href="tel:${esc(f.phone.replace(/\s/g, ""))}">${esc(f.phone)}</a>` : ""}
+        ${f.phone2 ? `<a class="contact__phone" href="tel:${esc(f.phone2.replace(/\s/g, ""))}">${esc(f.phone2)}</a>` : ""}
       </div>`;
     return section("kontaktua", s.fields,
       `<div class="contact">${md(s.body)}${links}</div>`, "band band--ink");
   },
 };
+
+/* Secciones de texto libre (título + intro + markdown) */
+const textSection = (id, band) => (s) =>
+  section(id, s.fields, `<div class="prose">${md(s.body)}</div>`, band);
+R.sarrera = textSection("sarrera");
+R.montessori = textSection("montessori", "band band--pro");
 
 /* Envoltorio común de sección con cabecera + divisor rítmico */
 function section(id, fields, inner, bandClass) {
@@ -284,18 +330,15 @@ function section(id, fields, inner, bandClass) {
 /* --- cabecera / navegación ---------------------------------------- */
 function renderTopbar(meta) {
   const f = meta ? meta.fields : {};
-  const items = [
-    ["#jokoak", f.nav_jokoak], ["#norentzat", f.nav_norentzat],
-    ["#agenda", f.nav_agenda], ["#profesionalak", f.nav_pro],
-    ["#kontaktua", f.nav_kontaktua],
-  ].filter(([, l]) => l)
+  const items = PAGE.nav.map(([h, k]) => [h, f[k]])
+.filter(([, l]) => l)
     .map(([h, l]) => `<a href="${h}">${esc(l)}</a>`).join("");
   const langs = LANGS.map((l) =>
     `<button class="langswitch__btn${l.code === currentLang ? " is-active" : ""}" data-lang="${l.code}">${esc(l.label)}</button>`
   ).join("");
   return `
     <div class="wrap topbar__inner">
-      <a class="brand" href="#hero">${esc(f.brand || "Jokai")}</a>
+      <a class="brand" href="${PAGE.homeHref}">${esc(f.brand || "Jokai")}</a>
       <nav class="nav">${items}</nav>
       <div class="langswitch" role="group" aria-label="Hizkuntza / Idioma">${langs}</div>
       <button class="menu-toggle" aria-label="Menu" aria-expanded="false">≡</button>
@@ -315,8 +358,9 @@ async function render(lang) {
     const data = parseContent(raw);
 
     top.innerHTML = renderTopbar(data.meta);
+    if (data.meta && data.meta.fields.page_title) document.title = data.meta.fields.page_title;
 
-    const html = SECTION_ORDER
+    const html = PAGE.order
       .filter((id) => data[id] && R[id])
       .map((id) => R[id](data[id], data.meta))
       .join("");

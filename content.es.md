@@ -66,7 +66,7 @@ intro: Dos mundos en tus manos.
 tag: Familiar · Estrella
 Juego participativo para toda la familia. Ambientado en la montaña de Mari, los jugadores deciden en común el rumbo de la historia. **A partir de 6 años.**
 
-[Conoce Larun](#kontaktua)
+[Conoce Larun](larun/)
 
 ### Mugarri
 tag: Más adulto · Cultural
