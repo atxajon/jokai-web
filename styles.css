@@ -163,6 +163,27 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.02; font-weight: 800; }
 .band--pro .beatbar .plank { background: var(--oak); }
 .band--ink { background: var(--ink); color: var(--txuri); }
 
+/* --- separadores inclinados -----------------------------------------
+   Donde cambia el color de fondo (hero, banda verde, banda oscura) el
+   borde no es recto: desciende suavemente de izquierda a derecha.
+   --slice = caída total del borde a lo ancho de la pantalla. */
+:root { --slice: clamp(10px, 1.4vw, 28px); }
+
+/* hero: borde superior recto (pegado a la cabecera), inferior inclinado */
+.hero {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--slice)));
+}
+/* banda verde: borde superior e inferior inclinados (paralelos) */
+.band--pro {
+  clip-path: polygon(0 0, 100% var(--slice), 100% 100%, 0 calc(100% - var(--slice)));
+}
+/* solo borde superior: debajo viene el pie, del mismo color */
+.band--ink {
+  clip-path: polygon(0 0, 100% var(--slice), 100% 100%, 0 100%);
+}
+/* la sección clara que sigue a una banda no lleva la línea recta */
+.hero + .sec, .band + .sec { border-top: 0; }
+
 /* --- grids y tarjetas --------------------------------------------- */
 .grid { display: grid; gap: 22px; }
 .grid-2 { grid-template-columns: repeat(2, 1fr); }
