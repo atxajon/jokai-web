@@ -25,6 +25,30 @@ const UI = {
         err_intro: "No se ha podido leer" },
 };
 
+/* Nombres de mes para las tarjetas de calendario de la agenda */
+const MONTHS = {
+  eu: ["urtarrila","otsaila","martxoa","apirila","maiatza","ekaina",
+       "uztaila","abuztua","iraila","urria","azaroa","abendua"],
+  es: ["enero","febrero","marzo","abril","mayo","junio",
+       "julio","agosto","septiembre","octubre","noviembre","diciembre"],
+};
+
+/* Tarjeta tipo calendario a partir de  YYYY-MM-DD  (sin zonas horarias). */
+function calendarCard(iso) {
+  const m = (iso || "").trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return "";
+  const [, year, mm, dd] = m;
+  const names = MONTHS[currentLang] || MONTHS[DEFAULT_LANG];
+  const month = names[parseInt(mm, 10) - 1];
+  if (!month) return "";
+  return `
+        <time class="cal" datetime="${year}-${mm}-${dd}">
+          <span class="cal__month">${esc(month)}</span>
+          <span class="cal__day">${dd}</span>
+          <span class="cal__year">${year}</span>
+        </time>`;
+}
+
 let currentLang = DEFAULT_LANG;
 const contentUrl = (lang) => `content.${lang}.md`;
 
@@ -209,10 +233,18 @@ const R = {
     const rows = items.length ? items.map((it) => {
       const link = (it.body.match(/\[([^\]]+)\]\(([^)]+)\)/));
       const bodyNoLink = it.body.replace(/\[([^\]]+)\]\(([^)]+)\)/, "").trim();
+      // Con campo  date: YYYY-MM-DD  -> tarjeta de calendario.
+      // Sin él (o mal escrito) -> se mantiene el título de texto de siempre.
+      const card = calendarCard(it.fields.date);
+      const when = card
+        ? card
+        : `<div class="event__when">${esc(it.title)}</div>`;
+      const town = card ? `<span class="event__town">${esc(it.title)}</span>` : "";
       return `
-      <article class="event">
-        <div class="event__when">${esc(it.title)}</div>
+      <article class="event${card ? " event--cal" : ""}">
+        ${when}
         <div class="event__what">
+          ${town}
           ${it.fields.place ? `<strong>${esc(it.fields.place)}</strong>` : ""}
           ${md(bodyNoLink)}
         </div>

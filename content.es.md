@@ -134,12 +134,14 @@ Sí, las plazas son limitadas. Mira la agenda y reserva tu sitio.
 <!-- @agenda -->
 title: Próximas sesiones
 
-### 16 de febrero · Azpeitia
+### Azpeitia
+date: 2027-02-16
 place: Teatro Soreasu · Larun
 17:00 · Sesión familiar · Entrada libre ⚠️ RELLENAR
 [Reservar plaza](#kontaktua)
 
-### 23 de febrero · Tolosa
+### Tolosa
+date: 2027-02-23
 place: Casa de cultura · Larun
 18:00 · Sesión familiar ⚠️ RELLENAR
 [Reservar plaza](#kontaktua)

@@ -59,7 +59,7 @@ Ikastetxe, udaleku eta talde kulturalentzako saio egokituak. Euskal kultura jola
 title: Gure jokoak
 intro: Esku artean dituzun bi mundu.
 
-### Larun
+### Larun instalazioa
 tag: Familiarra · Izarra
 Familia osoarentzako jolas parte-hartzailea. Mariren mendian girotua, jokalariek elkarlanean erabakitzen dute istorioaren norabidea. **6 urtetik aurrera.**
 
@@ -131,12 +131,14 @@ Bai, plazak mugatuak dira. Begiratu agenda eta erreserbatu zure tokia.
 <!-- @agenda -->
 title: Hurrengo saioak
 
-### otsailak 16 · Azpeitia
+### Elizondo
+date: 2026-10-17
 place: Soreasu antzokia · Larun
 17:00 · Familia saioa · Sarrera libre ⚠️ BETE
 [Plaza erreserbatu](#kontaktua)
 
-### otsailak 23 · Tolosa
+### Tolosa
+date: 2027-02-23
 place: Kultur etxea · Larun
 18:00 · Familia saioa ⚠️ BETE
 [Plaza erreserbatu](#kontaktua)

@@ -235,6 +235,32 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.02; font-weight: 800; }
 .event__what strong { font-family: var(--display); font-size: 18px; }
 .empty { font-family: var(--mono); opacity: .6; }
 
+/* tarjeta tipo calendario: [fecha] [detalles] [botón] siempre en 3 columnas */
+.event--cal { grid-template-columns: 96px minmax(0, 1fr) auto; }
+.cal {
+  display: flex; flex-direction: column; align-items: stretch; text-align: center;
+  width: 96px; border-radius: 11px; overflow: hidden; background: #fff;
+  box-shadow: 0 1px 0 var(--stone-2), 0 6px 14px color-mix(in srgb, var(--ink) 14%, transparent);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.cal__month {
+  background: #B3261A; color: #fff; padding: 6px 5px;
+  font-size: 12px; letter-spacing: .02em; text-transform: uppercase; line-height: 1.2;
+}
+.cal__day {
+  font-family: "Archivo", var(--display); font-weight: 800; font-stretch: 125%;
+  font-variant-numeric: lining-nums tabular-nums; font-size: 32px;
+  line-height: 1; padding: 8px 0 3px; color: #333; letter-spacing: 0;
+}
+.cal__year { font-size: 12px; padding: 0 0 8px; color: #333; line-height: 1.2; }
+.event__town {
+  display: block; font-family: var(--display); font-size: 30px; font-weight: 800;
+  line-height: 1.05; letter-spacing: -.02em; color: var(--ink); margin-bottom: 4px;
+}
+.event--cal .event__what strong {
+  display: block; font-size: 15px; font-weight: 600; opacity: .7; margin-bottom: 2px;
+}
+
 /* --- contacto ------------------------------------------------------ */
 .contact p { font-size: 21px; max-width: 34em; }
 .contact a { color: var(--oak); }
@@ -270,6 +296,13 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.02; font-weight: 800; }
   .hero { padding: 64px 0 56px; }
   .sec { padding: 60px 0; }
   .event { grid-template-columns: 1fr; gap: 8px; align-items: start; }
+  .event--cal { grid-template-columns: 70px minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+  .cal { width: 70px; border-radius: 10px; }
+  .cal__month { font-size: 10px; padding: 5px 3px; }
+  .cal__day { font-size: 26px; padding: 6px 0 2px; }
+  .cal__year { font-size: 10px; padding-bottom: 6px; }
+  .event__town { font-size: 24px; }
+  .event--cal .btn { padding: 8px 10px; font-size: 11px; text-align: center; max-width: 110px; }
   .stats { gap: 28px; }
 }
 
